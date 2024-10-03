@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vega-Lite Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #map, #bubble {
+            display: flex;
+            justify-content: center;
+            margin: 20px auto;
+            width: 80%;
+        }
+    </style>
+</head>
+<body>
+    <h1>People aged 15-24 years fully engaged in work and/or study in Australia</h1>
+    
+    <!-- Map Section -->
+    <div id="map"></div>
+
+    <!-- Bubble Plot Section -->
+    <h1>Comparison of Male and Female Employment Outcomes by Field of Study</h1>
+    <div id="bubble"></div>
+
+    <script type="text/javascript">
+        // Embed the map visualisation
+        vegaEmbed('#map', 'map.json').catch(console.error);
+
+        // Embed the bubble plot visualisation
+        vegaEmbed('#bubble', 'bubble.json').catch(console.error);
+    </script>
+</body>
+</html>

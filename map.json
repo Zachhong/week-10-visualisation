@@ -1,0 +1,69 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 1000,
+  "height": 900,
+  "projection": {
+    "type": "mercator", 
+    "scale": 900, 
+    "center": [133, -27]
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#666",
+        "strokeWidth": 1
+      },
+      "data": {"graticule": true}
+    },
+    {
+      "mark": {
+        "type": "geoshape",
+        "stroke": "black",
+        "strokeWidth": 1
+      },
+      "data": {
+        "url": "ne_10m_admin_1_states_provinces.json",
+        "format": {
+          "type": "topojson",
+          "feature": "ne_10m_admin_1_states_provinces"
+        }
+      },
+      "transform": [
+        {
+          "lookup": "properties.postal",
+          "from": {
+            "data": {
+              "url": "map-data.csv",
+              "format": {"type": "csv"}
+            },
+            "key": "state",
+            "fields": ["Persons fully engaged (%)"]
+          }
+        }
+      ],
+      "projection": {
+        "type": "mercator",
+        "scale": 900,
+        "center": [135, -25]
+      },
+      "encoding": {
+        "color": {
+          "field": "Persons fully engaged (%)",
+          "type": "quantitative",
+          "scale": {"scheme": "blues"},
+          "legend": {
+            "orient": "bottom",
+            "title": "Persons fully engaged (%)",
+            "labelFontSize": 12,
+            "titleFontSize": 14
+          }
+        },
+        "tooltip": [
+          {"field": "properties.name", "type": "nominal", "title": "State"},
+          {"field": "Persons fully engaged (%)", "type": "quantitative", "title": "Percentage of persons engaged in work or study (%)"}
+        ]
+      }
+    }
+  ]
+}

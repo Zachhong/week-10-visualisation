@@ -1,0 +1,161 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 1200,
+    "height": 500,
+    "data": {
+      "url": "bubble-data.csv",
+      "format": { "type": "csv" }
+    },
+    "params": [
+      {
+        "name": "employment_filter",
+        "value": 70,
+        "bind": {
+          "input": "range",
+          "min": 50,
+          "max": 100,
+          "step": 1,
+          "name": "Minimum Employment Rate (%)"
+        }
+      },
+      {
+        "name": "gender_filter",
+        "value": "Both",
+        "bind": {
+          "input": "select",
+          "options": ["Both", "Male", "Female"],
+          "name": "Gender"
+        }
+      }
+    ],
+    "transform": [
+      {
+        "filter": "gender_filter == 'Both' ? (datum['Overall employment 2022 (Male)'] >= employment_filter || datum['Overall employment 2022 (Female)'] >= employment_filter) : (gender_filter == 'Male' && datum['Overall employment 2022 (Male)'] >= employment_filter) || (gender_filter == 'Female' && datum['Overall employment 2022 (Female)'] >= employment_filter)"
+      }
+    ],
+    "layer": [
+      {
+        "mark": "circle",
+        "encoding": {
+          "x": {
+            "field": "Field of Study",
+            "type": "nominal",
+            "axis": {
+              "labelAngle": -45,
+              "labelFontSize": 20,
+              "title": "Field of Study"
+            }
+          },
+          "y": {
+            "field": "Overall employment 2022 (Male)",
+            "type": "quantitative",
+            "axis": {
+              "title": "Overall Employment (%)"
+            }
+          },
+          "size": {
+            "field": "Full-time employment 2022 (Male)",
+            "type": "quantitative",
+            "legend": { "title": "Male Employment (%)", "format": ".1s" }
+          },
+          "color": { "value": "blue" },
+          "tooltip": [
+            { "field": "Field of Study", "type": "nominal", "title": "Degree Studied:" },
+            { "field": "Overall employment 2022 (Male)", "type": "quantitative", "title": "Male Overall Employment %" },
+            { "field": "Full-time employment 2022 (Male)", "type": "quantitative", "title": "Male Full-time Employment %" }
+          ]
+        },
+        "transform": [
+          { "filter": "gender_filter == 'Both' || gender_filter == 'Male'" }
+        ]
+      },
+      {
+        "mark": "circle",
+        "encoding": {
+          "x": {
+            "field": "Field of Study",
+            "type": "nominal"
+          },
+          "y": {
+            "field": "Overall employment 2022 (Female)",
+            "type": "quantitative"
+          },
+          "size": {
+            "field": "Full-time employment 2022 (Female)",
+            "type": "quantitative",
+            "legend": { "title": "Female Employment (%)", "format": ".1s" }
+          },
+          "color": { "value": "pink" },
+          "tooltip": [
+            { "field": "Field of Study", "type": "nominal", "title": "Degree Studied:" },
+            { "field": "Overall employment 2022 (Female)", "type": "quantitative", "title": "Female Overall Employment %" },
+            { "field": "Full-time employment 2022 (Female)", "type": "quantitative", "title": "Female Full-time Employment %" }
+          ]
+        },
+        "transform": [
+          { "filter": "gender_filter == 'Both' || gender_filter == 'Female'" }
+        ]
+      },
+      {
+        "mark": {
+          "type": "text",
+          "align": "left",
+          "baseline": "middle",
+          "dx": 15,
+          "dy": -5,
+          "fontSize": 12,
+          "fontWeight": "bold"
+        },
+        "encoding": {
+          "x": { "field": "Field of Study", "type": "nominal" },
+          "y": { "field": "Overall employment 2022 (Male)", "type": "quantitative" },
+          "text": {
+            "condition": {
+              "test": "datum['Overall employment 2022 (Male)'] > 95.4",
+              "value": "Highest Male Employment %"
+            },
+            "value": ""
+          },
+          "tooltip": [
+            { "field": "Field of Study", "type": "nominal", "title": "Males had the highest rates of employment in:" }
+          ]
+        }
+      },
+
+      {
+        "mark": {
+          "type": "text",
+          "align": "left",
+          "baseline": "middle",
+          "dx": 5,
+          "dy": -15,
+          "fontSize": 12,
+          "fontWeight": "bold"
+        },
+        "encoding": {
+          "x": { "field": "Field of Study", "type": "nominal" },
+          "y": { "field": "Overall employment 2022 (Female)", "type": "quantitative" },
+          "text": {
+            "condition": {
+              "test": "datum['Overall employment 2022 (Female)'] > 97",
+              "value": "Highest Female Employment %"
+            },
+            "value": ""
+          },
+          "tooltip": [
+            { "field": "Field of Study", "type": "nominal", "title": "Females had the highest rates of employment in:" }
+          ]
+        }
+      }
+    ],
+    "config": {
+      "legend": {
+        "labelFontSize": 12,
+        "titleFontSize": 14
+      }
+    },
+    "resolve": {
+      "scale": { "color": "independent", "size": "independent" }
+    }
+  }
+  
